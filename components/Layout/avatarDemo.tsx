@@ -15,6 +15,8 @@ import {
   LogOutIcon,
 } from "lucide-react";
 
+import Link from "next/link";
+
 export function DropdownMenuAvatar() {
   return (
     <DropdownMenu>
@@ -64,7 +66,7 @@ export function DropdownMenuAvatar() {
           </DropdownMenuItem>
           <DropdownMenuItem>
             <BadgeCheckIcon />
-            Account
+            <Link href="/Dashboard/Profile">Account</Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
             <CreditCardIcon />

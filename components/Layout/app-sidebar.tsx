@@ -1,4 +1,7 @@
+"use client";
+
 import { DropdownMenuAvatar } from "./avatarDemo";
+import { useCart } from "@/components/context/CartContext";
 
 import Link from "next/link";
 import {
@@ -31,17 +34,33 @@ const sideItems = [
   {
     icon: <ChartBarBig size={15} />,
     name: "Lifecycle",
-    href: "Dashboard/Lifecycle",
+    href: "/Dashboard/Lifecycle",
   },
-  { icon: <ChartColumnBig size={15} />, name: "Analytics", href: "/analytics" },
-  { icon: <Files size={15} />, name: "Project", href: "/project" },
+  {
+    icon: <ChartColumnBig size={15} />,
+    name: "Analytics",
+    href: "/Dashboard/Analytics",
+  },
+  { icon: <Files size={15} />, name: "Project", href: "/Dashboard/Project" },
   { icon: <Users size={15} />, name: "Team", href: "/team" },
 ];
 
 const Docs = [
-  { icon: <Database size={15} />, name: "Data Library" },
-  { icon: <ClipboardList size={15} />, name: "Reports" },
-  { icon: <FileLock size={15} />, name: "Word Assistant" },
+  {
+    icon: <Database size={15} />,
+    name: "Data Library",
+    href: "/Dashboard/Data_Library",
+  },
+  {
+    icon: <ClipboardList size={15} />,
+    name: "Reports",
+    href: "/Dashboard/Reports",
+  },
+  {
+    icon: <FileLock size={15} />,
+    name: "Word Assistant",
+    href: "/Dashboard/Word_Assistant",
+  },
 ];
 
 const sideFooter = [
@@ -51,6 +70,8 @@ const sideFooter = [
 ];
 
 export function AppSidebar() {
+  const { cart } = useCart();
+  const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
   return (
     <Sidebar className={`bg-[#171717]  text-white p-3 border-none "}`}>
       <SidebarHeader>
@@ -63,9 +84,19 @@ export function AppSidebar() {
             <CirclePlus />
             Quick Create
           </Button>
-          <div className="border-gray-500 border rounded-lg p-2  hover:opacity-85">
-            <Mail size={15} />
-          </div>
+          <Link
+            href="/Dashboard/Cart"
+            className="border-gray-500 border rounded-lg p-2  hover:opacity-85 relative"
+          >
+            <span>
+              <Mail size={15} />
+            </span>
+            {totalItems > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+                {totalItems}
+              </span>
+            )}
+          </Link>
         </div>
       </SidebarHeader>
       <SidebarContent>
@@ -84,13 +115,14 @@ export function AppSidebar() {
         <SidebarGroup>
           <p className="text-xs text-gray-400">Documents</p>
           {Docs.map((doc, index) => (
-            <div
+            <Link
+              href={doc.href}
               key={index}
               className="flex items-center text-sm gap-2 py-2 pl-2 hover:bg-[#1f1f1f] rounded-lg cursor-pointer"
             >
               {doc.icon}
               <span>{doc.name}</span>
-            </div>
+            </Link>
           ))}
           <p className="text-sm font-semibold text-gray-400 p-2 flex items-center gap-3">
             <span className="font-bold text-sm pb-2">...</span>
