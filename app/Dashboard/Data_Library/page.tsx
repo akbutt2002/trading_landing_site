@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useCart } from "@/components/context/CartContext";
 import toast from "react-hot-toast";
 import Quantity from "../Cart/Quantity";
+import { div } from "three/tsl";
 
 type Product = {
   id: number;
@@ -54,42 +55,55 @@ const cardData: Product[] = [
 
 const DataLibrary = () => {
   const { addToCart } = useCart();
+  const { cart, increaseQty, decreaseQty } = useCart();
 
   return (
-    <section className="w-full grid grid-cols-5 gap-5  h-screen">
-      {cardData.map((item) => (
-        <div
-          key={item.id}
-          className=" w-full bg-gray-100 rounded-sm h-2/3 text-black flex flex-col gap-2"
-        >
-          <div className="relative w-full h-1/2  bg-white rounded-t-sm">
-            <Image
-              src={item.image}
-              alt="Item Image"
-              fill
-              className="object-contain rounded-t-sm p-2"
-            />
-          </div>
-          <div className="px-2 ">
-            <p className="pb-1 text-sm leading-6">{item.details}</p>
-            <p className="mb-2">
-              <sup>$</sup>
-              <span className="text-4xl font-semibold">{item.price}</span>
-              <sup>99</sup>
-            </p>
+    <section className="w-full grid grid-cols-5 gap-5  h-screen mt-5">
+      {cardData.map((item) => {
+        const cartItem = cart.find((c) => c.id === item.id);
 
-            <Button
-              onClick={() => {
-                addToCart(item);
-                toast.success("Item added to cart!");
-              }}
-              className="bg-yellow-400 rounded-full px-2 my-auto text-xs hover:cursor-pointer"
-            >
-              Add to Cart
-            </Button>
+        return (
+          <div
+            key={item.id}
+            className=" w-full bg-gray-100 rounded-sm h-2/3 text-black flex flex-col gap-2"
+          >
+            <div className="relative w-full h-1/2  bg-white rounded-t-sm">
+              <Image
+                src={item.image}
+                alt="Item Image"
+                fill
+                className="object-contain rounded-t-sm p-2"
+              />
+            </div>
+            <div className="px-2 ">
+              <p className="pb-1 text-sm leading-6">{item.details}</p>
+              <p className="mb-2">
+                <sup>$</sup>
+                <span className="text-4xl font-semibold">{item.price}</span>
+                <sup>99</sup>
+              </p>
+              {cartItem ? (
+                <Quantity
+                  increase={increaseQty}
+                  decrease={decreaseQty}
+                  itemId={item.id}
+                  quantity={cartItem.quantity}
+                />
+              ) : (
+                <Button
+                  onClick={() => {
+                    addToCart(item);
+                    toast.success("Item added to cart!");
+                  }}
+                  className="bg-yellow-400 rounded-full px-2 my-auto text-xs hover:cursor-pointer"
+                >
+                  Add to Cart
+                </Button>
+              )}
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </section>
   );
 };
