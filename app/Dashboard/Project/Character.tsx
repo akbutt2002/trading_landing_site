@@ -6,7 +6,7 @@ import { useRef } from "react";
 
 export default function PokemonModel({ mouse }: any) {
   const { scene } = useGLTF("/charizard.glb");
-  const ref = useRef<any>();
+  const ref = useRef<any>(null);
 
   useFrame(() => {
     if (!ref.current) return;
